@@ -1,35 +1,32 @@
 #include <I2Cdev.h>
 #include <MPU6050.h>
 #include <Wire.h>//添加必须的库文件
+#include <SoftwareSerial.h>
 #include "mpu.h"
+
 #include <Adafruit_NeoPixel.h>
 #define PIN A0
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(6, PIN, NEO_GRB + NEO_KHZ800);
 
-unsigned long safe_ms=millis();
+#include "ble.h"
+
+//unsigned long safe_ms = millis();
 
 void setup() {
   Wire.begin();
   Serial.begin(115200);
+  mySerial2.begin(9600);
   accelgyro.initialize();
-
+  strip.begin();
+  strip.show(); // Initialize all pixels to 'off'
 }
 
 void loop() {
-    strip.begin();
-    strip.show(); // Initialize all pixels to 'off'
+  ble();
+  if (!color_en)
+  {
     getMPU();
-    
-    colorWipe(strip.Color(Angel_accX, Angel_accY, Angel_accZ), 10);
-    safe_ms=millis();
-  }
-
-
-void colorWipe(uint32_t c, uint8_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
-    strip.show();
-    delay(wait);
+    colorWipe(strip.Color(Angel_accX, Angel_accY, Angel_accZ));
   }
 }
 
