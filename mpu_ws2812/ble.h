@@ -1,7 +1,8 @@
 #include "arduino.h"
 SoftwareSerial mySerial(4, 5);
 
-#define mySerial2 Serial1 // RX, TX   //ble
+//#define mySerial2 Serial1 // RX, TX   //ble
+#define mySerial2 mySerial // RX, TX   //ble
 
 String currentInfo;
 char buffer[100];
